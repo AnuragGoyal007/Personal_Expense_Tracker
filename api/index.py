@@ -16,9 +16,6 @@ app = Flask(__name__, static_folder="../static", template_folder="../templates")
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 
-# Ensure instance folder exists
-os.makedirs(os.path.join(os.path.dirname(__file__), '../instance'), exist_ok=True)
-
 db.init_app(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
