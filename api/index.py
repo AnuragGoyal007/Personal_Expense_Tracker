@@ -38,6 +38,11 @@ def home():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
+        # Explicitly check for existing user to make it more robust
+        if User.query.filter_by(username=form.username.data).first():
+            flash('That username is already taken. Please choose a different one.', 'danger')
+            return render_template("register.html", form=form)
+
         hashed_password = generate_password_hash(form.password.data)
         user = User(username=form.username.data, password=hashed_password, budget=form.budget.data)
         db.session.add(user)
