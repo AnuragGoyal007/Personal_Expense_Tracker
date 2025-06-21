@@ -17,6 +17,11 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 
 db.init_app(app)
+
+# Initialize DB within app context right after initialization
+with app.app_context():
+    db.create_all()
+
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
@@ -164,7 +169,3 @@ def profile():
                 flash("Password changed successfully!", "success")
                 return redirect(url_for('profile'))
     return render_template("profile.html", password_form=password_form, budget_form=budget_form)
-
-# Initialize DB
-with app.app_context():
-    db.create_all()
