@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block content %}
+{% set cat_icons = {'Food':'🍔','Travel':'🚗','Bills':'💡','Shopping':'🛍️','Health':'💊','Misc':'📦'} %}
+<h2>Welcome, {{ current_user.username }}!</h2>
+
+{% if budget %}
+<div class="alert {% if over_budget %}alert-danger{% else %}alert-success{% endif %}">
+    Monthly Budget: {{ budget }} | Total Spent: {{ total_spent }}
+</div>
+<div class="mb-3">
+  <div class="progress" style="height: 28px;">
+    {% set percent = (total_spent / budget * 100) if budget else 0 %}
+    <div class="progress-bar {% if over_budget %}bg-danger{% else %}bg-primary{% endif %}"
+         role="progressbar"
+         style="width: {{ percent if percent <= 100 else 100 }}%; font-size: 1.1rem;"
+         aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100">
+      {{ percent|round(1) }}% used
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<h4 class="mt-4">Add New Expense</h4>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="row">
+        <div class="col-md-3 mb-2">
+            {{ form.category.label }} {{ form.category(class="form-control") }}
+        </div>
+        <div class="col-md-2 mb-2">
+            {{ form.amount.label }} {{ form.amount(class="form-control") }}
+        </div>
+        <div class="col-md-3 mb-2">
+            {{ form.date.label }} {{ form.date(class="form-control") }}
+        </div>
+        <div class="col-md-4 mb-2">
+            {{ form.description.label }} {{ form.description(class="form-control form-control-sm", style="height:38px;") }}
+        </div>
+    </div>
+    <div class="text-center">
+        <div class="btn-group mt-2" role="group">
+            <button class="btn btn-primary">{{ form.submit.label }}</button>
+            <a href="{{ url_for('export') }}" class="btn btn-secondary">Export CSV</a>
+        </div>
+    </div>
+</form>
+
+<!-- Side-by-side layout for chart and table -->
+<div class="row g-4 mb-4">
+  <div class="col-12 col-md-5">
+    <h4 class="mt-2">Expense Breakdown</h4>
+    <div class="mb-4">
+      {% if chart_data %}
+        <div id="expense_piechart" style="width:100%;max-width:500px;height:350px;margin:auto;"></div>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+          const catIcons = { 'Food':'🍔','Travel':'🚗','Bills':'💡','Shopping':'🛍️','Health':'💊','Misc':'📦' };
+          google.charts.load('current', {'packages':['corechart']});
+          google.charts.setOnLoadCallback(drawChart);
+          function drawChart() {
+            var dataArr = [['Category', 'Amount']
+            {% for cat, amt in chart_data.items() %}
+              ,[catIcons['{{ cat }}'] ? catIcons['{{ cat }}'] + ' {{ cat }}' : '📦 {{ cat }}', {{ amt }}]
+            {% endfor %}
+            ];
+            var data = google.visualization.arrayToDataTable(dataArr);
+            var options = {
+              title: 'Expenses by Category',
+              pieHole: 0.4,
+              legend: { position: 'right' },
+              chartArea: { width: '90%', height: '80%' },
+              colors: ['#4e73df','#1cc88a','#36b9cc','#f6c23e','#e74a3b','#858796'],
+              tooltip: { trigger: 'focus' }
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('expense_piechart'));
+            chart.draw(data, options);
+          }
+        </script>
+      {% else %}
+        <div class="alert alert-info text-center">No expenses to display in the breakdown yet. Add some expenses to see the chart!</div>
+      {% endif %}
+    </div>
+    <div class="text-center mb-3">
+      <a href="{{ url_for('export') }}" class="btn btn-sm btn-secondary">Export CSV</a>
+    </div>
+  </div>
+  <div class="col-12 col-md-7">
+    <h4 class="mt-2">All Expenses</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th style="width: 28%;" class="text-center">Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.date }}</td>
+                <td><span title="{{ expense.category }}">{{ cat_icons.get(expense.category, '📦') }}</span> {{ expense.category }}</td>
+                <td>{{ expense.amount }}</td>
+                <td style="max-width: 220px;" class="text-truncate align-middle">{{ expense.description }}</td>
+                <td>
+                    <a href="{{ url_for('edit_expense', expense_id=expense.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ expense.id }}">
+                        Delete
+                    </button>
+                    <div class="modal fade" id="deleteModal{{ expense.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ expense.id }}" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel{{ expense.id }}">Delete Expense</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure you want to delete this expense?<br>
+                            <strong>{{ cat_icons.get(expense.category, '📦') }} {{ expense.category }}</strong> — {{ expense.amount }}<br>
+                            <em>{{ expense.description }}</em>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <form method="POST" action="{{ url_for('delete_expense', expense_id=expense.id) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Dashboard Quick Stats -->
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <div style="font-size:2rem;">💸</div>
+        <h6 class="mt-2">Biggest Expense</h6>
+        <div class="fw-bold">{% if expenses %}{{ expenses[0].amount }} ({{ cat_icons.get(expenses[0].category, '📦') }} {{ expenses[0].category }}){% else %}-{% endif %}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <div style="font-size:2rem;">🏆</div>
+        <h6 class="mt-2">Most Frequent Category</h6>
+        <div class="fw-bold">
+          {% if expenses %}
+            {% set freq_cat = expenses|groupby('category')|sort(attribute='|length', reverse=True)|first %}
+            {{ cat_icons.get(freq_cat.grouper, '📦') }} {{ freq_cat.grouper }} ({{ freq_cat.list|length }})
+          {% else %}-{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <div style="font-size:2rem;">🧾</div>
+        <h6 class="mt-2">Total Expenses</h6>
+        <div class="fw-bold">{{ expenses|length }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

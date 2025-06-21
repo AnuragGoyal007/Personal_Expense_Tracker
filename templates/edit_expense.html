@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="col-md-6">
+    <div class="card shadow-lg">
+      <div class="card-body">
+        <div class="text-center mb-4">
+          <span style="font-size:2rem;">💰</span>
+          <h3 class="mt-2 mb-0">Edit Expense</h3>
+          <small class="text-muted">Update your expense details</small>
+        </div>
+        <form method="POST">
+          {{ form.hidden_tag() }}
+          <div class="mb-3">
+            {{ form.category.label }}
+            {{ form.category(class="form-control") }}
+          </div>
+          <div class="mb-3">
+            {{ form.amount.label }}
+            {{ form.amount(class="form-control") }}
+          </div>
+          <div class="mb-3">
+            {{ form.date.label }}
+            {{ form.date(class="form-control") }}
+          </div>
+          <div class="mb-3">
+            {{ form.description.label }}
+            {{ form.description(class="form-control") }}
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success btn-block">Update Expense</button>
+          </div>
+        </form>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-link mt-3">Back to Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 

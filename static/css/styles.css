@@ -1,0 +1,274 @@
+/* General body styling */
+body {
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+/* Navbar branding */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.7rem;
+    letter-spacing: 1px;
+}
+
+/* Center heading */
+h2, h3, h4 {
+    text-align: center;
+}
+
+/* Form input fields */
+input.form-control, select.form-control, textarea.form-control {
+    border-radius: 10px;
+    border: 1.5px solid #b6c9e2;
+    box-shadow: 0 1px 4px rgba(80,120,200,0.07);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+input.form-control:focus, select.form-control:focus, textarea.form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 2px 8px rgba(80,120,200,0.13);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 10px;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    font-weight: 500;
+}
+.btn-primary, .btn-success {
+    box-shadow: 0 2px 8px rgba(78,115,223,0.08);
+}
+.btn-primary:hover, .btn-success:hover, .btn-warning:hover, .btn-danger:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 16px rgba(78,115,223,0.15);
+    filter: brightness(1.08);
+}
+
+/* Cards */
+.card {
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(80,120,200,0.10);
+    transition: box-shadow 0.3s, transform 0.2s;
+    background: rgba(255,255,255,0.97);
+}
+.card:hover {
+    box-shadow: 0 12px 32px rgba(80,120,200,0.18);
+    transform: translateY(-2px) scale(1.01);
+}
+
+/* Tables */
+.table {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(80,120,200,0.07);
+}
+.table th, .table td {
+    vertical-align: middle;
+    border: none;
+}
+.table tbody tr:hover {
+    background: #f0f6ff;
+    transition: background 0.2s;
+}
+
+/* Alert boxes */
+.alert {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(80,120,200,0.07);
+}
+
+/* Chart container padding */
+canvas {
+    margin: auto;
+    display: block;
+}
+
+/* Footer (if added later) */
+footer {
+    margin-top: 40px;
+    padding: 20px;
+    background: #343a40;
+    color: white;
+    text-align: center;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-shadow: 0 -2px 8px rgba(80,120,200,0.07);
+}
+
+/* Links */
+a {
+    color: #4e73df;
+    transition: color 0.2s;
+}
+a:hover {
+    color: #224abe;
+    text-decoration: underline;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    color: #e0e0e0;
+    transition: background 0.3s, color 0.3s;
+}
+body.dark-mode .navbar, body.dark-mode .navbar-dark.bg-dark {
+    background: #18191a !important;
+}
+body.dark-mode .card {
+    background: #23272b;
+    color: #e0e0e0;
+    box-shadow: 0 6px 24px rgba(20,20,20,0.25);
+}
+body.dark-mode .table {
+    background: #23272b;
+    color: #e0e0e0;
+}
+body.dark-mode .table tbody tr:hover {
+    background: #2c2f34;
+}
+body.dark-mode .progress {
+    background: #18191a;
+}
+body.dark-mode .progress-bar.bg-primary {
+    background-color: #4e73df !important;
+}
+body.dark-mode .progress-bar.bg-danger {
+    background-color: #e74a3b !important;
+}
+body.dark-mode .alert {
+    background: #23272b;
+    color: #e0e0e0;
+    border-color: #444;
+}
+body.dark-mode .modal-content {
+    background: #23272b;
+    color: #e0e0e0;
+}
+body.dark-mode .btn {
+    color: #e0e0e0;
+}
+body.dark-mode a {
+    color: #8ab4f8;
+}
+body.dark-mode a:hover {
+    color: #4e73df;
+}
+
+/* Section spacing */
+section, .mb-section {
+    margin-bottom: 2.5rem;
+}
+
+/* Glassmorphism for cards and modals */
+.card, .modal-content {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 32px rgba(78,115,223,0.13);
+    border: 1px solid rgba(200,200,255,0.13);
+}
+.card:hover {
+    box-shadow: 0 16px 40px rgba(78,115,223,0.18);
+}
+
+/* Buttons - gradient and shadow */
+.btn-primary, .btn-success {
+    background: linear-gradient(90deg, #4e73df 0%, #36b9cc 100%);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(78,115,223,0.13);
+}
+.btn-danger {
+    background: linear-gradient(90deg, #e74a3b 0%, #f6c23e 100%);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(231,74,59,0.13);
+}
+.btn-warning {
+    background: linear-gradient(90deg, #f6c23e 0%, #e74a3b 100%);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(246,194,62,0.13);
+}
+.btn:active {
+    filter: brightness(0.95);
+}
+
+/* Progress bar polish */
+.progress {
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(78,115,223,0.10);
+    background: #e0eafc;
+    overflow: hidden;
+}
+.progress-bar {
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(78,115,223,0.13);
+    transition: width 0.4s cubic-bezier(.4,2,.6,1), background 0.2s;
+}
+
+/* Table row colored dot by category */
+.table-category-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+.table-category-dot.Food { background: #4e73df; }
+.table-category-dot.Travel { background: #36b9cc; }
+.table-category-dot.Bills { background: #f6c23e; }
+.table-category-dot.Shopping { background: #1cc88a; }
+.table-category-dot.Health { background: #e74a3b; }
+.table-category-dot.Misc { background: #858796; }
+
+/* Smooth transitions for interactive elements */
+.card, .btn, .progress-bar, .table tbody tr, .alert, .modal-content {
+    transition: box-shadow 0.3s, background 0.3s, color 0.3s, border 0.3s;
+}
+
+/* Dark mode polish */
+body.dark-mode {
+    background: linear-gradient(135deg, #232526 0%, #283e51 100%);
+    color: #e0e0e0;
+}
+body.dark-mode .card, body.dark-mode .modal-content {
+    background: rgba(40,44,52,0.92);
+    backdrop-filter: blur(8px);
+    color: #e0e0e0;
+    box-shadow: 0 8px 32px rgba(36,60,120,0.18);
+    border: 1px solid rgba(80,120,200,0.13);
+}
+body.dark-mode .table {
+    background: #23272b;
+    color: #e0e0e0;
+}
+body.dark-mode .table tbody tr:hover {
+    background: #2c2f34;
+}
+body.dark-mode .progress {
+    background: #18191a;
+}
+body.dark-mode .progress-bar.bg-primary {
+    background: linear-gradient(90deg, #4e73df 0%, #36b9cc 100%) !important;
+}
+body.dark-mode .progress-bar.bg-danger {
+    background: linear-gradient(90deg, #e74a3b 0%, #f6c23e 100%) !important;
+}
+body.dark-mode .alert {
+    background: #23272b;
+    color: #e0e0e0;
+    border-color: #444;
+}
+body.dark-mode .btn {
+    color: #e0e0e0;
+}
+body.dark-mode a {
+    color: #8ab4f8;
+}
+body.dark-mode a:hover {
+    color: #4e73df;
+}
